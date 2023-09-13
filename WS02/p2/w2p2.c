@@ -134,7 +134,7 @@ int main(void)
         intRemaining = (int)subtotal % 2;
         remaining = (float)(intRemaining) / 100;
     printf("Loonies  %3d %9.4lf\n", Loonies, remaining);
-
+    printf("Test");
 
 
 
