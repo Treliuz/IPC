@@ -141,5 +141,6 @@ int main(void)
         intRemaining = intSubtotal % 25;
         remaining = (float)intRemaining / 100;
     printf("Quarters  %3d %9.4lf\n", quarters, remaining);
+    
     return 0;
 }
