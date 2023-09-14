@@ -21,7 +21,7 @@ int main(void)
     const char patSize = 'S', salSize = 'M', tomSize = 'L';
     const double TAX = 0.13;
     double remaining;
-    double quarters;
+    int quarters;
     double dimes;
     double nickels;
     double pennies;
@@ -127,18 +127,19 @@ int main(void)
     printf("-------- --- ---------\n");
     printf("%22.4lf\n", subtotal);
     //Toonies substraction
-        Toonies = subtotal / 2;
-        remaining = (int)(subtotal + 0.005) % 2;
+        Toonies = intSubtotal / 200;
+        intRemaining = intSubtotal % 200;
+        remaining = (float)intRemaining / 100;
     printf("Toonies  %3d %9.4lf\n", Toonies, remaining);
-        Loonies = remaining / 2;
-        intRemaining = (int)subtotal % 2;
-        remaining = (float)(intRemaining) / 100;
+    //Loonies substraction
+        Loonies = intRemaining / 100;
+        intRemaining = intSubtotal % 100;
+        remaining = (float)intRemaining / 100;
     printf("Loonies  %3d %9.4lf\n", Loonies, remaining);
-    printf("Test");
-
-
-
-
-
+    //Quarters substraction
+        quarters = intRemaining / 25;
+        intRemaining = intSubtotal % 25;
+        remaining = (float)intRemaining / 100;
+    printf("Quarters  %3d %9.4lf\n", quarters, remaining);
     return 0;
 }
