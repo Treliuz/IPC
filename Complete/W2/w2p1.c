@@ -20,9 +20,7 @@ int main(void)
 {
     const double TAX = 0.13;
     const char patSize = 'S';
-    double priceS;
-    double priceM;
-    double priceL;
+    double smallPrice, medPrice, largePrice;
     double subtotal;
     double Taxtotal;
     double Total;
@@ -30,30 +28,30 @@ int main(void)
     int intSubtotal;
     int intTax;
     int intTotal;
-
+    //Input price for shirt sizes
     printf("Set Shirt Prices\n");
     printf("================\n");
 
     printf("Enter the price for a SMALL shirt: $");
-    scanf("\n%lf", &priceS);
+    scanf("\n%lf", &smallPrice);
 
     printf("Enter the price for a MEDIUM shirt: $");
-    scanf("\n%lf", &priceM);
+    scanf("\n%lf", &medPrice);
 
     printf("Enter the price for a LARGE shirt: $");
-    scanf("%lf", &priceL);
-
+    scanf("%lf", &largePrice);
+    //Displaying previously stored prices
     printf("\nShirt Store Price List\n");
     printf("======================\n");
-    printf("SMALL  : $%.2lf\n", priceS);
-    printf("MEDIUM : $%.2lf\n", priceM);
-    printf("LARGE  : $%.2lf\n\n", priceL);
-
+    printf("SMALL  : $%.2lf\n", smallPrice);
+    printf("MEDIUM : $%.2lf\n", medPrice);
+    printf("LARGE  : $%.2lf\n\n", largePrice);
+    //Input number of shirts bought
     printf("Patty's shirt size is '%c'\n", patSize);
     printf("Number of shirts Patty is buying: ");
     scanf("%d", &shirtNum);
-
-    intSubtotal = (int)(priceS * 100);
+    //Calculating receipt information
+    intSubtotal = (int)(smallPrice * 100);
     subtotal = (float)(intSubtotal * shirtNum) / 100;
 
     intTax = (int)((subtotal * TAX + 0.005) * 100);
@@ -61,7 +59,7 @@ int main(void)
 
     intTotal = (int)((subtotal + Taxtotal + 0.005) * 100);
     Total = (float)(intTotal) / 100;
-
+    //Printing receipt
     printf("\nPatty's shopping cart...\n");
     printf("Contains : %d shirts\n", shirtNum);
     printf("Sub-total: $%8.4lf\n", subtotal);
