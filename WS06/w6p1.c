@@ -4,7 +4,7 @@
 Full Name  : Joseph Mwamba-Mukuna
 Student ID#: 163997216
 Email      : jmwamba-mukuna@myseneca.ca
-Section    : NPP
+Section    : NRA
 
 Authenticity Declaration:
 I declare this submission is the result of my own work and has not been
