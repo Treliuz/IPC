@@ -19,7 +19,6 @@ int main(void)
 {
     char loopType;
     int loopNum;
-    int killSwitch = 1;
 
     printf("+----------------------+\n");
     printf("Loop application STARTED\n");
@@ -38,7 +37,7 @@ int main(void)
             printf("+--------------------+\n");
             printf("Loop application ENDED\n");
             printf("+--------------------+\n");               
-            killSwitch = 0;
+            return 0;
         }
         
         //Checks for incorrect usage of the exit sequence
@@ -96,7 +95,7 @@ int main(void)
         }
 
     //While variable killSwitch is equal to 1 loop will continue
-    } while(killSwitch);
+    } while(1);
 
     return 0;
 }
