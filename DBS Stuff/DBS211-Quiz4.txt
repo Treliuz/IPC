@@ -1,0 +1,13 @@
+1) Identify the primary keys for each table
+	a) In table TRUCK, TRUCK_NUM and TRUCK_SERIAL_NUM form a composite key.
+	b) In table BASE, BASE_CODE is the primary key.
+	c) In table TYPE, TYPE_CODE is the primary key.
+2) Identify the foreign keys for each talbe
+	a) In table TRUCK, BASE_CODE and TYPE_CODE are the foreign keys
+	b) In table BASE, there are no foreign keys
+	c) In table TYPE, there are no foreign keys
+4)
+SELECT 
+	truck_serial_num
+WHERE
+	base_code = 502;

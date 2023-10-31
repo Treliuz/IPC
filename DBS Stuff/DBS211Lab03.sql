@@ -201,7 +201,7 @@ INTO employees
 INTO employees
     (employeenumber, lastname, firstname, extension, email, officecode, reportsto, jobtitle) VALUES ('3918', 'Zhou', 'Yuxi', 'x5763', 'yuxile@ffxiv.com', 4, 1088, 'Cashier')
 SELECT 
-    1
+    *
 FROM 
     dual;
 //18. Create a single statement to delete both yourself and the fake employee
