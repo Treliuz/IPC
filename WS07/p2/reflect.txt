@@ -1,11 +1,35 @@
 ///////////////////////////////////////////////////////////////////////////
                                Reflection
                              Workshop - #7
-Full Name  : 
-Student ID#: 
+Full Name  :Joseph Mwamba-Mukuna 
+Student ID#:163997216
 
 Authenticity Declaration:
 I declare this submission is the result of my own work and has not been
 shared with any other student or 3rd party content provider. This submitted
 piece of work is entirely of my own creation.
 ///////////////////////////////////////////////////////////////////////////
+
+1. I managed to solve the non-repetitive sections by first checking if the values that made them have to repeat were used previously in the code.
+    As an example, from line 173 to line 195 we check if the value assigned to the variables have changed and make a case for if they have and haven't.
+
+2. The use of structs made it easy not to weorry about the variables accidentally changing in the process of coding.
+
+3.  do 
+    {
+        
+        if(nextMove != -1)
+        {
+            printf("\n  ");
+            for(i = 0; i < Game.pathLength; i++)
+            {
+                if(i != nextMove - 1)
+                {
+                    printf(" ");
+                }
+                else 
+                {
+                    printf("%c", Stats.symbol);
+                }
+            }
+        }
