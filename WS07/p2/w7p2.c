@@ -32,8 +32,8 @@ struct GameInfo
 {
     int moves;
     int pathLength;
-    char bombs[MAX_LENGTH];
-    char treasure[MAX_LENGTH];
+    int bombs[MAX_LENGTH];
+    int treasure[MAX_LENGTH];
 };
 
 int main(void)
