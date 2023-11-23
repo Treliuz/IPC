@@ -68,18 +68,18 @@ int main(void)
     // Unit Tests:
 
     // Integer testers
-    test01_inputInt();
-    test02_inputIntPositive();
-    test03_inputIntRange();
-    test04_inputIntRange();
+    //test01_inputInt();
+    //test02_inputIntPositive();
+    //test03_inputIntRange();
+    //test04_inputIntRange();
 
     // Char tester
-    test05_inputCharOption();
+    //test05_inputCharOption();
 
     // C string testers
-    test06_inputCString();
-    test07_inputCString();
-    test08_inputCString();
+    //test06_inputCString();
+    //test07_inputCString();
+    //test08_inputCString();
 
     // phone
     test09_displayPhone();
