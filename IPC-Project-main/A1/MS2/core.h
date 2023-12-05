@@ -1,0 +1,69 @@
+/*/////////////////////////////////////////////////////////////////////////
+                        Assignment 1 - Milestone 2
+Full Name  : Joseph Mwamba-Mukuna
+Student ID#: 163997216 
+Email      : jmwamba-mukuna@myseneca.ca
+Section    : NRA
+
+Authenticity Declaration:
+I declare this submission is the result of my own work and has not been
+shared with any other student or 3rd party content provider. This submitted
+piece of work is entirely of my own creation.
+/////////////////////////////////////////////////////////////////////////*/
+
+// SAFE-GUARD: 
+// It is good practice to apply safe-guards to header files
+// Safe-guard's ensures only 1 copy of the header file is used in the project build
+// The macro name should be mirroring the file name with _ for spaces, dots, etc.
+
+// !!! DO NOT DELETE THE BELOW 2 LINES !!!
+#ifndef CORE_H
+#define CORE_H
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// 
+// Copy your work done from Milestone #1 (core.h) into this file
+// 
+// NOTE:
+// - Organize your functions into the below categories
+// - Make sure the core.c file also lists these functions in the same order!
+// - Be sure to provide a BRIEF comment for each function prototype
+// - The comment should also be copied to the core.c function definition
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+//////////////////////////////////////
+// USER INTERFACE FUNCTIONS
+//////////////////////////////////////
+
+// Clear the standard input buffer
+void clearInputBuffer(void);
+
+// Wait for user to input the "enter" key to continue
+void suspend(void);
+
+//////////////////////////////////////
+// USER INPUT FUNCTIONS
+//////////////////////////////////////
+
+// get integer value from user
+int inputInt(void);
+
+//Checks if integer is positive
+int inputIntPositive(void);
+
+//Checks if integer value is within range 
+int inputIntRange(int min, int max);
+
+//Check if entered char matches the permitted characters 
+char inputCharOption(const char valid[]);
+
+//Receives a string and checks if its length is valid
+void inputCString(char* str, int minChar, int maxChar);
+
+//Receives 10 digits and formats it into a phone number
+void displayFormattedPhone(const char str[]);
+
+// !!! DO NOT DELETE THE BELOW LINE !!!
+#endif // !CORE_H
