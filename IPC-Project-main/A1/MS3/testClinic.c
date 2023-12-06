@@ -460,8 +460,8 @@ void viewAppointmentSchedule(struct ClinicData* data) {
                 }
             }
         }  
-    printf("\n");
     }
+    printf("\n");
 }
 // Add an appointment record to the appointment array
 // Todo:
@@ -560,10 +560,13 @@ maxPatients) {
         date.month = inputIntRange(1, 12);
         // Taking the day as input
         printf("Day (1-");
-        if (date.month == 4 || date.month == 9 ||  date.month == 11) {
+        if (date.month == 4 || date.month == 9 ||  date.month == 11) 
+        {
             lastDay = 30;
         }
-        if (date.month == 2) {            lastDay = 28;
+        if (date.month == 2) 
+        {            
+            lastDay = 28;
         }
         if (date.year % 4 == 0 && date.month == 2) {
             lastDay = 29;

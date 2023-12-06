@@ -44,24 +44,48 @@ piece of work is entirely of my own creation.
 
 // Data type: Phone
 // (Copy your code from MS#2)
-
+struct Phone
+{
+    char description[PHONE_DESC_LEN + 1];
+    char number[PHONE_LEN + 1];
+};
 
 // Data type: Patient 
 // (Copy your code from MS#2)
-
+struct Patient
+{
+    int patientNumber;
+    char name[NAME_LEN];
+    struct Phone phone;
+};
 // ------------------- MS#3 -------------------
 
 // Data type: Time
 // ToDo:
-
+struct Time
+{
+    int hour;
+    int min;
+}
 
 // Data type: Date
 // ToDo:
+struct Date
+{
+    int day;
+    int month;
+    int year;
+};
 
 
 // Data type: Appointment
 // ToDo:
-
+struct Appointment
+{
+    int patientNumber;
+    struct Date date;
+    struct Time time;
+}
 
 
 // ClinicData type: Provided to student
@@ -73,8 +97,6 @@ struct ClinicData
     struct Appointment* appointments;
     int maxAppointments;
 };
-
-
 
 //////////////////////////////////////
 // DISPLAY FUNCTIONS
@@ -134,19 +156,15 @@ void removePatient(struct Patient patient[], int max);
 // View ALL scheduled appointments
 // Todo:
 
-
 // View appointment schedule for the user input date
 // Todo:
-
+void viewAppointmentSchedule(struct ClinicData* data);
 
 // Add an appointment record to the appointment array
 // Todo:
 
-
 // Remove an appointment record from the appointment array
 // Todo:
-
-
 
 //////////////////////////////////////
 // UTILITY FUNCTIONS

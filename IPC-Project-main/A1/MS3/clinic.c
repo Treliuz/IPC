@@ -94,7 +94,6 @@ void displayScheduleData(const struct Patient* patient,
     printf(" (%s)\n", patient->phone.description);
 }
 
-
 //////////////////////////////////////
 // MENU & ITEM SELECTION FUNCTIONS
 //////////////////////////////////////
@@ -219,7 +218,6 @@ void menuPatientEdit(struct Patient* patient)
     } while (selection);
 }
 
-
 // !!! DO NOT MODIFY THIS FUNCTION DEFINITION !!!
 // Menu: Appointment Management
 void menuAppointment(struct ClinicData* data)
@@ -263,7 +261,6 @@ void menuAppointment(struct ClinicData* data)
     } while (selection);
 }
 
-
 // ---------------------------------------------------------------------------
 // !!! INSERT/COPY YOUR MS#2 FUNCTION DEFINITIONS BELOW... !!!
 // Note: Maintain the same order/sequence as it is listed in the header file
@@ -273,28 +270,178 @@ void menuAppointment(struct ClinicData* data)
 
 // Display's all patient data in the FMT_FORM | FMT_TABLE format
 // (Copy your code from MS#2)
+void displayAllPatients(const struct Patient patient[], int max, int fmt)
+{
+    int i;
+    int validRecFlag = 0;
+    if (fmt == FMT_TABLE)
+    {
+        displayPatientTableHeader();
+    }
 
+    for (i = 0; i < max; i++)
+    {
+        if (patient[i].patientNumber != 0)
+        {
+            displayPatientData(&patient[i], fmt);
+            validRecFlag = 1;
+        }
+    }
+
+    if (!validRecFlag)
+    {
+        printf("*** No records found ***\n\n");
+    }
+    printf("\n");
+}
 
 // Search for a patient record based on patient number or phone number
 // (Copy your code from MS#2)
-
+void searchPatientData(const struct Patient patient[], int max)
+{
+    int searchOption;
+    do {
+        printf("Search Options\n");
+        printf("==========================\n");
+        printf("1) By patient number\n");
+        printf("2) By phone number\n");
+        printf("..........................\n");
+        printf("0) Previous menu\n");
+        printf("..........................\n");
+        printf("Selection: ");
+        scanf("%d", &searchOption);
+        printf("\n");
+        //Jump to different functions depending on user selection
+        switch (searchOption) {
+            case 1:
+                searchPatientByPatientNumber(patient, max);
+                clearInputBuffer();
+                suspend();
+                break;
+            case 2:
+                searchPatientByPhoneNumber(patient, max);
+                clearInputBuffer();
+                suspend();
+                break;
+        }
+    } while (searchOption != 0);
+}
 
 // Add a new patient record to the patient array
 // (Copy your code from MS#2)
-
+void addPatient(struct Patient patient[], int max)
+{
+    int i;
+    int size = 0;
+    for (i = 0; i < max; i++)
+    {
+        //Checks if a element in patient array is free
+        //Increments array if previous element is taken
+        if (patient[i].patientNumber != 0)
+        {
+            size++;
+        }
+    }
+    //Checking to see if the max number of patients has been reached
+    if (size < max)
+    {
+        patient[size].patientNumber = nextPatientNumber(patient, max);
+        inputPatient(patient + size);
+        printf("*** New patient record added ***\n\n");
+        clearInputBuffer();
+    }
+    //Prints an error if array is full
+    else 
+    {
+        printf("ERROR: Patient listing is FULL!\n\n");
+    }
+}
 
 // Edit a patient record from the patient array
 // (Copy your code from MS#2)
-
+void editPatient(struct Patient patient[], int max)
+{
+    int patientNum;
+    int patientFile;
+    printf("Enter the patient number: ");
+    scanf("%d", &patientNum);
+    printf("\n");
+    patientFile = findPatientIndexByPatientNum(patientNum, patient, max);
+    //If patient file is found jump to the edit function
+    if (patientFile != -1)
+    {
+        menuPatientEdit(&patient[patientFile]);
+    }
+    else 
+    {
+        printf("ERROR: Patient record not found!\n");
+    }
+}
 
 // Remove a patient record from the patient array
 // (Copy your code from MS#2)
+void removePatient(struct Patient patient[], int max)
+{
+    int patientNum;
+    int patientFile;;
+    char confirm;
+    printf("Enter the patient number: ");
+    scanf("%d", &patientNum);
+    printf("\n");
+    patientFile = findPatientIndexByPatientNum(patientNum, patient, max);
+    //If patient file is found jump to the removal function
+    if (patientFile != -1)
+    {
+        //Displaying patient information
+        printf("Name  : %s\n", patient[patientFile].name);
+        printf("Number: %05d\n", patient[patientFile].patientNumber);
+        printf("Phone : ");
+        displayFormattedPhone(patient[patientFile].phone.number);
+        printf(" (%s)", patient[patientFile].phone.description);
+        printf("\n\n");
+        //Getting confirmation from user to remove patient record
+        printf("Are you sure you want to remove this patient record? (y/n): ");
+        scanf(" %c", &confirm);
 
+        if (confirm == 'n' || confirm == 'N') 
+        {
+            printf("Operation aborted.\n\n");
+            clearInputBuffer();
+        }
+
+        else if (confirm == 'y' || confirm == 'Y')
+        {
+            
+            patient[patientFile].patientNumber = 0;
+            printf("Patient record has been removed!\n\n");
+            clearInputBuffer();
+        }
+    }
+    else 
+    {
+        printf("ERROR: Patient record not found!\n\n");
+        clearInputBuffer();
+    }
+}
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Milestone #3 mandatory functions...
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+int compareAppointments(const void *a, const void *b) {
+    const struct Appointment *appA = (const struct Appointment *)a;
+    const struct Appointment *appB = (const struct Appointment *)b;
+    //qsort(appoints, max, sizeof(struct Appointment), compareAppointments);
+
+    // Compare total minutes
+    int minA = (appA->date.year * 12 * 30 * 24 * 60) + (appA->date.month * 30 * 24 * 60) +
+               (appA->date.day * 24 * 60) + (appA->time.hour * 60) + appA->time.min;
+
+    int minB = (appB->date.year * 12 * 30 * 24 * 60) + (appB->date.month * 30 * 24 * 60) +
+               (appB->date.day * 24 * 60) + (appB->time.hour * 60) + appB->time.min;
+
+    return minA - minB;
+}
 // View ALL scheduled appointments
 // Todo:
 
@@ -317,20 +464,94 @@ void menuAppointment(struct ClinicData* data)
 
 // Search and display patient record by patient number (form)
 // (Copy your code from MS#2)
+void searchPatientByPatientNumber(const struct Patient patient[], int max)
+{
+    int patientNum;
+    int patientFile;
 
+    printf("Search by patient number: ");
+    scanf("%d", &patientNum);
+    printf("\n");
+    patientFile = findPatientIndexByPatientNum(patientNum, patient, max);
+    //Checks if the patient exists
+    if (patientFile != -1)
+    {
+        //Display patient information
+        printf("Name  : %s\n", patient[patientFile].name);
+        printf("Number: %05d\n", patient[patientFile].patientNumber);
+        printf("Phone : ");
+        displayFormattedPhone(patient[patientFile].phone.number);
+        printf(" (%s)", patient[patientFile].phone.description);
+        printf("\n\n");
+    }
+    else
+    {
+        printf("*** No records found ***\n\n");
+    }
+}
 
 // Search and display patient records by phone number (tabular)
 // (Copy your code from MS#2)
-
+void searchPatientByPhoneNumber(const struct Patient patient[], int max)
+{
+    int i;
+    int found = 0;
+    char phoneNum[PHONE_LEN + 1];
+    clearInputBuffer();
+    printf("Seach by phone number: ");
+    fgets(phoneNum, sizeof(phoneNum), stdin);
+    printf("\n");
+    //Tabular format header
+    displayPatientTableHeader();
+    for (i = 0; i < max; i++)
+    {
+        //Compare phone numbers to find a match
+        if (strcmp(patient[i].phone.number, phoneNum) == 0)
+        {
+            printf("%05d %-15s ", patient[i].patientNumber, patient[i].name);
+            displayFormattedPhone(patient[i].phone.number);
+            printf(" (%s)\n", patient[i].phone.description);
+            found++;
+        }
+    }
+    printf("\n");
+    //Checking if the number was found
+    if (!found)
+    {
+        printf("*** No records found ***\n\n");
+    }
+}
 
 // Get the next highest patient number
 // (Copy your code from MS#2)
-
+int nextPatientNumber(const struct Patient patient[], int max)
+{
+    int nextNum = 0;
+    int i;
+    for (i = 0; i < max; i++) 
+    {
+        if (patient[i].patientNumber > nextNum) 
+        {
+            nextNum = patient[i].patientNumber;
+        }
+    }
+    return nextNum + 1;
+}
 
 // Find the patient array index by patient number (returns -1 if not found)
 // (Copy your code from MS#2)
-
-
+int findPatientIndexByPatientNum(int patientNumber, const struct Patient patient[], int max) {
+    int i;
+    for (i = 0; i < max; i++) 
+    {
+        if (patient[i].patientNumber == patientNumber) 
+        {
+            return i;
+        }
+    }
+    // If record isn't found return -1
+    return -1;
+}
 
 //////////////////////////////////////
 // USER INPUT FUNCTIONS
@@ -338,12 +559,77 @@ void menuAppointment(struct ClinicData* data)
 
 // Get user input for a new patient record
 // (Copy your code from MS#2)
+void inputPatient(struct Patient* patient)
+{
+    printf("Patient Data Input\n");
+    printf("------------------\n");
+    printf("Number: %05d\n", patient->patientNumber);
+    printf("Name  : ");
+    //gets name from user and inputs into array
+    fgets(patient->name, sizeof(patient->name), stdin);
+    if (patient->name[strlen(patient->name) - 1] == '\n');
+    {
+        //Replaces newline character with null terminator
+        patient->name[strlen(patient->name) - 1] = '\0';
+    }
 
+    printf("\n");
+    inputPhoneData(&patient->phone);
+}
 
 // Get user input for phone contact information
 // (Copy your code from MS#2)
+void inputPhoneData(struct Phone* phone)
+{
+    int phoneType;
+    printf("Phone Information\n");
+    printf("-----------------\n");
+    printf("How will the patient like to be contacted?\n");
+    printf("1. Cell\n");
+    printf("2. Home\n");
+    printf("3. Work\n");
+    printf("4. TBD\n");
+    printf("Selection: ");
+    scanf("%d", &phoneType);
+    printf("\n");
 
-
+    switch (phoneType)
+    {
+    case 1:
+        //Storing the description
+        strncpy(phone->description, "CELL", PHONE_DESC_LEN);
+        printf("Contact: %s\n", phone->description);
+        //Clearing buffer then getting user input for the phone number
+        clearInputBuffer();
+        printf("Number : ");
+        fgets(phone->number, sizeof(phone->number), stdin);
+        printf("\n");
+        break;
+    case 2:
+        strncpy(phone->description, "HOME", PHONE_DESC_LEN);
+        printf("Contact: %s\n", phone->description);
+        clearInputBuffer();
+        printf("Number : ");
+        fgets(phone->number, sizeof(phone->number), stdin);
+        printf("\n");
+        break;
+    case 3:
+        strncpy(phone->description, "WORK", PHONE_DESC_LEN);
+        printf("Contact: %s\n", phone->description);
+        clearInputBuffer();
+        printf("Number : ");
+        fgets(phone->number, sizeof(phone->number), stdin);
+        printf("\n");
+        break;
+    case 4:
+        strncpy(phone->description, "TBD", PHONE_DESC_LEN);
+        *phone->number = 0;
+        break;
+    default:
+        printf("Error:\n");
+        break;
+    }
+}
 
 //////////////////////////////////////
 // FILE FUNCTIONS
@@ -351,7 +637,61 @@ void menuAppointment(struct ClinicData* data)
 
 // Import patient data from file into a Patient array (returns # of records read)
 /// ToDo:
+int importPatients(const char* datafile, struct Patient patients[], int max)
+{
+    int i;
 
+    FILE *fp;
+
+    fp = fopen(datafile, "r");
+
+    if (fp != NULL)
+    {
+        while(i < max && fscanf(fp,  "%d|%[^|]|%[^|]|%[^\n]", &patients[i].patientNumber, patients[i].name,
+        patients[i].phone.description, patients[i].phone.number)!=EOF)
+        {
+            i++;
+        }
+        fclose(fp);
+    }
+
+    else
+    {
+        printf("ERROR: File could not be read\n");
+    }
+
+    return i;
+}
 
 // Import appointment data from file into an Appointment array (returns # of records read)
 // ToDo:
+int importAppointments(const char* datafile, struct Appointment appoints[], int max)
+{
+    int i;
+    int count;
+
+    FILE *fp;
+    fp = fopen(datafile, "r");
+
+    if(fp != NULL)
+    {
+        for (i = 0; i < max && !feof(fp); i++) 
+        {
+            fscanf(fp, "%d,%d,%d,%d,%d,%d", &appoints[i].patientNumber, &appoints[i].date.year, 
+            &appoints[i].date.month, &appoints[i].date.day, &appoints[i].time.hour, &appoints[i].time.min);
+
+            if (!feof(fp)) 
+            {
+                count++;
+            }
+        }
+        fclose(fp);
+    }
+
+    else
+    {
+        printf("ERROR: File could not be read\n");
+    }
+
+    return count;
+}

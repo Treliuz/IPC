@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../CS50/Practice"
+		},
+		{
+			"path": "../../../../../CS50/Problems"
+		},
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"stdio.h": "c"
+		}
+	}
+}
