@@ -37,7 +37,12 @@ piece of work is entirely of my own creation.
 // MS#3 Additional macro's:
 // ToDo:
 
-
+//
+//SOD = Start of Day
+//EOD = End of Day
+#define SOD 10
+#define EOD 14
+#define MINUTE_INTERVAL 30
 //////////////////////////////////////
 // Structures
 //////////////////////////////////////
@@ -66,7 +71,7 @@ struct Time
 {
     int hour;
     int min;
-}
+};
 
 // Data type: Date
 // ToDo:
@@ -85,7 +90,7 @@ struct Appointment
     int patientNumber;
     struct Date date;
     struct Time time;
-}
+};
 
 
 // ClinicData type: Provided to student
@@ -112,9 +117,8 @@ void displayPatientData(const struct Patient* patient, int fmt);
 void displayScheduleTableHeader(const struct Date* date, int isAllRecords);
 
 // Display a single appointment record with patient info. in tabular format
-void displayScheduleData(const struct Patient* patient,
-                         const struct Appointment* appoint,
-                         int includeDateField);
+void displayScheduleData(const struct Patient* patient,const struct Appointment* appoint,
+                        int includeDateField);
 
 
 //////////////////////////////////////
@@ -155,17 +159,16 @@ void removePatient(struct Patient patient[], int max);
 
 // View ALL scheduled appointments
 // Todo:
-
+void viewAllAppointments(struct ClinicData* data);
 // View appointment schedule for the user input date
 // Todo:
 void viewAppointmentSchedule(struct ClinicData* data);
-
-// Add an appointment record to the appointment array
+// Add an appointment record to the appointment arra
 // Todo:
-
+void addAppointment(struct Appointment *app, int, struct Patient *pt, int);
 // Remove an appointment record from the appointment array
 // Todo:
-
+void removeAppointment(struct Appointment *app, int, struct Patient *pt, int);
 //////////////////////////////////////
 // UTILITY FUNCTIONS
 //////////////////////////////////////

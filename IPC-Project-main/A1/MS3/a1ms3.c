@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 
-#include "clinic.h"
+#include "testClinic.h"
 
 #define MAX_PETS 20
 #define MAX_APPOINTMENTS 50

@@ -74,8 +74,7 @@ void displayPatientData(const struct Patient* patient, int fmt);
 // Display's appointment schedule headers (date-specific or all records)
 void displayScheduleTableHeader(const struct Date* date, int isAllRecords);
 // Display a single appointment record with patient info. in tabular format
-void displayScheduleData(const struct Patient* patient,
-                         const struct Appointment* appoint,
+void displayScheduleData(const struct Patient* patient, const struct Appointment* appoint,
                          int includeDateField);
 //////////////////////////////////////
 // MENU & ITEM SELECTION FUNCTIONS

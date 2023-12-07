@@ -14,7 +14,8 @@ piece of work is entirely of my own creation.
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <string.h>
 
 // include the user library "core" so we can use those functions
 #include "core.h"
@@ -67,6 +68,7 @@ void displayScheduleTableHeader(const struct Date* date, int isAllRecords)
         printf("Date       Time  Pat.# Name            Phone#\n"
                "---------- ----- ----- --------------- --------------------\n");
     }
+    
     else
     {
         printf("%04d-%02d-%02d\n\n", date->year, date->month, date->day);
@@ -77,8 +79,7 @@ void displayScheduleTableHeader(const struct Date* date, int isAllRecords)
 
 // !!! DO NOT MODIFY THIS FUNCTION DEFINITION !!!
 // Display a single appointment record with patient info. in tabular format
-void displayScheduleData(const struct Patient* patient,
-                         const struct Appointment* appoint,
+void displayScheduleData(const struct Patient* patient, const struct Appointment* appoint,
                          int includeDateField)
 {
     if (includeDateField)
@@ -411,7 +412,6 @@ void removePatient(struct Patient patient[], int max)
 
         else if (confirm == 'y' || confirm == 'Y')
         {
-            
             patient[patientFile].patientNumber = 0;
             printf("Patient record has been removed!\n\n");
             clearInputBuffer();
@@ -427,40 +427,215 @@ void removePatient(struct Patient patient[], int max)
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Milestone #3 mandatory functions...
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+int compareAppointments(const void *a, const void *b) 
+{
+    const struct Appointment *appointmentA = (const struct Appointment *)a;
+    const struct Appointment *appointmentB = (const struct Appointment *)b;
+    //qsort(appoints, max, sizeof(struct Appointment), compareppointments);
 
-int compareAppointments(const void *a, const void *b) {
-    const struct Appointment *appA = (const struct Appointment *)a;
-    const struct Appointment *appB = (const struct Appointment *)b;
-    //qsort(appoints, max, sizeof(struct Appointment), compareAppointments);
+    //Add total time together for each appointment 
+    //creating a single integer similar to UNIX time for easier comparison and sorting
+    int minA = (appointmentA->date.year * 12 * 30 * 24 * 60) + (appointmentA->date.month * 30 * 24 * 60) +
+               (appointmentA->date.day * 24 * 60) + (appointmentA->time.hour * 60) + appointmentA->time.min;
 
-    // Compare total minutes
-    int minA = (appA->date.year * 12 * 30 * 24 * 60) + (appA->date.month * 30 * 24 * 60) +
-               (appA->date.day * 24 * 60) + (appA->time.hour * 60) + appA->time.min;
-
-    int minB = (appB->date.year * 12 * 30 * 24 * 60) + (appB->date.month * 30 * 24 * 60) +
-               (appB->date.day * 24 * 60) + (appB->time.hour * 60) + appB->time.min;
-
+    int minB = (appointmentB->date.year * 12 * 30 * 24 * 60) + (appointmentB->date.month * 30 * 24 * 60) +
+               (appointmentB->date.day * 24 * 60) + (appointmentB->time.hour * 60) + appointmentB->time.min;
+    //Compare result of each appointment 
     return minA - minB;
+}
+
+void sort(struct Appointment app[], int max)
+{
+    int i;
+    //Storing the "UNIX" minutes 
+    for (i = 0; i < max; i++) 
+    {
+        app[i].time.min = (app[i].date.year * 12 * 30 * 24 * 60) + (app[i].date.month * 30 * 24
+        * 60) + (app[i].date.day * 24 * 60) + (app[i].time.hour * 60) + app[i].time.min;
+    }
+
+    qsort(app, max, sizeof(struct Appointment), compareAppointments);
+
+    //Revert "UNIX" conversion to display properly
+    for (i = 0; i < max; i++) 
+    {
+        app[i].time.min = app[i].time.min - (app[i].date.year * 12 * 30 * 24 * 60) - 
+        (app[i].date.month * 30 * 24 * 60) - (app[i].date.day * 24 * 60) - (app[i].time.hour * 60);
+    }
 }
 // View ALL scheduled appointments
 // Todo:
-
-
+void viewAllAppointments(struct ClinicData* data) 
+{
+    int i;
+    int j;
+    //Sorts the data
+    sort(data->appointments, data->maxAppointments);
+    //Display patients
+    displayScheduleTableHeader(NULL, 1);
+    //Prints appointment information followed by patient info
+    for (i = 0; i < data->maxAppointments; i++) 
+    {
+        for (j = 0; j < data->maxPatient; j++) 
+        {
+            if (data->appointments[i].patientNumber && data->patients[j].patientNumber) 
+            {
+                if (data->appointments[i].patientNumber == data->patients[j].patientNumber) 
+                {
+                    displayScheduleData(&data->patients[j], &data->appointments[i], 1);
+                }
+            }
+        }
+    }
+    printf("\n");
+}
 // View appointment schedule for the user input date
 // Todo:
+void viewAppointmentSchedule(struct ClinicData* data)
+{
+    int i, j;
+    struct Date date;
+    //Get year from user
+    printf("Year        : ");
+    date.year = inputIntPositive();
+    //Get month from user
+    printf("Month (1-12): ");
+    date.month = inputIntRange(1, 12);
 
+    //Number of days in each month
+    int numOfDays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    //Number of days in a month 
+    int totalDays = numOfDays[date.month];
 
+    //Account for leap years since those exist for some reason I have yet to understand
+    if (date.year % 4 == 0 && date.month == 2) 
+    {
+        totalDays = 29;
+    }
+
+    printf("%d)  : ", totalDays);
+    date.day = inputIntRange(1, totalDays);
+    printf("\n");
+    //Sorts the data
+    sort(data->appointments, data->maxAppointments);
+    
+    //Prints appointment information followed by patient info
+    displayScheduleTableHeader(&date, 0);
+    for (i = 0; i < data->maxAppointments; i++) 
+    {
+        for (j = 0; j < data->maxPatient; j++) 
+        {
+            if (data->appointments[i].patientNumber && data->patients[j].patientNumber) 
+            {
+                if (data->appointments[i].patientNumber == data->patients[j].patientNumber) 
+                {
+                    if (data->appointments[i].date.year == date.year && data->appointments[i].date.month == 
+                        date.month && data->appointments[i].date.day == date.day) 
+                    {
+                        displayScheduleData(&data->patients[j], &data->appointments[i], 0);
+                    }
+                }
+            }
+        }  
+    }
+    printf("\n");
+}
 // Add an appointment record to the appointment array
 // Todo:
+void addAppointment(struct Appointment *app, int maxApp, struct Patient *pt, int maxPatients)
+{
+    struct Date date;
+    struct Time time;
+    int numDays = 31;
+    int patientNumber; 
+    int index; 
+    int slotAvail = 1;
 
+    //Getting user input 
+    printf("Patient Number: ");
+    patientNumber = inputIntPositive();
+    index = findPatientIndexByPatientNum(patientNumber, pt, maxPatients);
+    if(index >= 0)
+    {
+        do
+        {
+            printf("Year        : ");
+            date.year = inputIntPositive();
+            // Taking the month as input
+            printf("Month (1-12): ");
+            date.month = inputIntRange(1, 12);
+            // Taking the day as input
+            printf("Day (1-");
+            //Number of days in each month
+            int numOfDays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+            //Number of days in a month 
+            int totalDays = numOfDays[date.month];
+            //Account for leap years since those exist for some reason I have yet to understand
+            if (date.year % 4 == 0 && date.month == 2) 
+            {
+                totalDays = 29;
+            }
+            printf("%d)  : ", totalDays);
+            date.day = inputIntRange(1, totalDays);
+
+            printf("Hour (0-23)  : ");
+            time.hour = inputIntRange(0, 23);
+            printf("Minute (0-59): ");
+            time.min = inputIntRange(0, 59);
+
+            //Check if slot is available
+            if (timeSlotCheck(date, time, app, maxApp))
+            {
+                printf("\nERROR: Appointment timeslot is not available!\n\n");
+            }
+
+            else
+            {
+                while ((time.hour < SOD || time.hour > EOD) || (time.hour && time.min > 0) 
+                || (time.min % MINUTE_INTERVAL != 0))
+                {
+                    printf("ERROR: Time must be between %02d:00 and %02d:00 in %02d minute intervals.\n\n",
+                    SOD, EOD, MINUTE_INTERVAL);
+                    printf("Hour (0-23)  : ");
+                    time.hour = inputIntRange(0,23);
+                    printf("Minute (0-59): ");
+                    time.min = inputIntRange(0,59);
+                }
+                slotAvail = 0;
+            }
+        } while (slotAvail);
+        
+         
+    }
+
+
+}
 
 // Remove an appointment record from the appointment array
 // Todo:
+void removeAppointment(struct Appointment *app, int, struct Patient *pt, int)
+{
 
+}
 
 //////////////////////////////////////
 // UTILITY FUNCTIONS
 //////////////////////////////////////
+int timeSlotCheck(struct Date date, struct Time time, struct Appointment* app, int maxAppointments)
+{
+    int i;
+    int avail = 0;
+    for (i = 0; i < maxAppointments; i++)
+    {
+        if (date.year == app[i].date.year && date.month == app[i].date.month && date.day == 
+            app[i].date.day && time.hour == app[i].time.hour && time.min == app[i].time.min)
+        {
+            avail = 1;
+        }
+    }
+    return avail;
+}
+
 
 // Search and display patient record by patient number (form)
 // (Copy your code from MS#2)
@@ -552,6 +727,7 @@ int findPatientIndexByPatientNum(int patientNumber, const struct Patient patient
     // If record isn't found return -1
     return -1;
 }
+
 
 //////////////////////////////////////
 // USER INPUT FUNCTIONS

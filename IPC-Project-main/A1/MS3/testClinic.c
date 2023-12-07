@@ -401,10 +401,14 @@ void viewAllAppointments(struct ClinicData* data) {
     sort(data->appointments, data->maxAppointments);
     // Displaying the patients
         displayScheduleTableHeader(NULL, 1);
-    for (i = 0; i < data->maxAppointments; i++) {
-        for (j = 0; j < data->maxPatient; j++) {
-            if (data->appointments[i].patientNumber && data->patients[j].patientNumber) {
-                if (data->appointments[i].patientNumber == data->patients[j].patientNumber) {
+    for (i = 0; i < data->maxAppointments; i++) 
+    {
+        for (j = 0; j < data->maxPatient; j++) 
+        {
+            if (data->appointments[i].patientNumber && data->patients[j].patientNumber) 
+            {
+                if (data->appointments[i].patientNumber == data->patients[j].patientNumber) 
+                {
                     displayScheduleData(&data->patients[j], &data->appointments[i], 1);
                 }
             }
@@ -507,7 +511,7 @@ maxPatients)
             time.hour = inputIntRange(0, 23);
             printf("Minute (0-59): ");
             time.min = inputIntRange(0, 59);
-                        // Checking whether time slot is available
+            // Checking whether time slot is available
             if (timeSlotAvailable(date, time, app, maxAppointments)) 
             {
                 printf("\nERROR: Appointment timeslot is not available!\n\n");
@@ -669,20 +673,25 @@ int findPatientIndexByPatientNum(int patientNumber, const struct Patient patient
 int timeSlotAvailable(struct Date date, struct Time time, struct Appointment* app, int 
 maxAppointments) {
     int i, slotAvailable = 0;
-    for (i = 0; i < maxAppointments; i++) {
+    for (i = 0; i < maxAppointments; i++) 
+    {
         // Checking if time slot is available
         if (date.year == app[i].date.year && date.month == app[i].date.month && date.day == 
-app[i].date.day && time.hour == app[i].time.hour && time.min == app[i].time.min) {
+            app[i].date.day && time.hour == app[i].time.hour && time.min == app[i].time.min) 
+        {
             slotAvailable = 1;
         }
     }
     return slotAvailable;
 }
 // Checks to see which is the next slot that is available and return the index
-int nextSlotAvailable(struct Appointment* app, int maxAppointments) {
+int nextSlotAvailable(struct Appointment* app, int maxAppointments) 
+{
     int i = 0, available = 0;
-    while (available == 0 && i < maxAppointments) {
-        if (app[i].patientNumber < 1) {
+    while (available == 0 && i < maxAppointments) 
+    {
+        if (app[i].patientNumber < 1) 
+        {
             available = 1;
         }
         i++;
