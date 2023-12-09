@@ -57,7 +57,7 @@ int inputInt(void)
 	}
 	return userInput;
 }
-// Check if entered int is positive
+//Check if entered int is positive
 int inputIntPositive(void)
 {
 	int userInput;
@@ -130,17 +130,30 @@ char inputCharOption(const char* validChar)
 void inputCString(char* str, int minLength, int maxLength)
 {
 	int length = 0;
+	char ch;
 	do
     {
-        scanf("%[^\n]", str);
-        clearInputBuffer();
+		length = 0;
+        //scanf("%[^\n]", str);
+        //clearInputBuffer();
 
-        // Calculate the length of the entered string
-        length = 0;
-        while (str[length] != '\0')
+        //Read char until a newline or maxLength is reached
+        while (ch != '\n' && length <= maxLength)
         {
+			ch = getchar();
+            str[length] = ch;
             length++;
         }
+
+		if (ch == '\n' && length <= (maxLength + 1)) {
+            length--;
+            str[length] = '\0';
+        }
+		else 
+		{
+			str[maxLength] = '\0';
+            clearInputBuffer();
+		}
 
         if (length < minLength || length > maxLength)
         {
@@ -152,6 +165,7 @@ void inputCString(char* str, int minLength, int maxLength)
 			else if(length > maxLength) 
             {
                 printf("ERROR: String length must be no more than %d chars: ", maxLength);
+
             }
 			else 
 			{
@@ -161,6 +175,50 @@ void inputCString(char* str, int minLength, int maxLength)
 
     } while (length < minLength || length > maxLength);
 }
+
+/* void inputCString(char* str, int minChar, int maxChar) {
+    int flag = 1;
+    char ch = 'a';
+    while (flag) {
+        int len = 0;
+        // Takes a string as input until it sees a newline character
+        while (ch != '\n' && len <= maxChar) {
+            ch = getchar();
+            str[len] = ch;
+            len++;
+        };
+        // If the string is less than or equal to the maxChars we will just add '\0' to the end to mark 
+        //the end of the string
+        if (ch == '\n' && len <= (maxChar + 1)) {
+            len--;
+            str[len] = '\0';
+        }
+        // If length is more than maxChar, we will add '\0' to the end and ignore the extra characters.
+        //We will also remove the extra characters from the buffer.
+        else {
+            str[maxChar] = '\0';
+            clearInputBuffer();
+        }
+        if (minChar == maxChar && len != minChar) {
+            printf("ERROR: String length must be exactly %d chars: ", minChar);
+            ch = 'a';
+        }
+        else if (len < minChar || len > maxChar) {
+            if (len > maxChar) {
+                printf("ERROR: String length must be no more than %d chars: ", maxChar);
+                ch = 'a';
+            }
+            else if (len < minChar) {
+                printf("ERROR: String length must be between %d and %d chars: ", minChar, maxChar);
+                ch = 'a';
+            }
+        }
+        else 
+        {
+        flag = 0;
+        }
+    }
+}*/
 
 void displayFormattedPhone(const char* str)
 {

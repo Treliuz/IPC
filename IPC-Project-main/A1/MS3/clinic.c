@@ -334,27 +334,29 @@ void addPatient(struct Patient patient[], int max)
 {
     int i;
     int size = 0;
+    int spotFound = 0;
     for (i = 0; i < max; i++)
     {
         //Checks if a element in patient array is free
         //Increments array if previous element is taken
-        if (patient[i].patientNumber != 0)
+        if (patient[i].patientNumber == 0)
         {
-            size++;
+            spotFound = 1;
         }
+        size++;
+    }
+    //Prints an error if array is full
+    if (spotFound == 0)
+    {
+        printf("ERROR: Patient listing is FULL!\n\n");       
     }
     //Checking to see if the max number of patients has been reached
-    if (size < max)
+    else 
     {
         patient[size].patientNumber = nextPatientNumber(patient, max);
         inputPatient(patient + size);
         printf("*** New patient record added ***\n\n");
         clearInputBuffer();
-    }
-    //Prints an error if array is full
-    else 
-    {
-        printf("ERROR: Patient listing is FULL!\n\n");
     }
 }
 
@@ -386,6 +388,8 @@ void removePatient(struct Patient patient[], int max)
     int patientNum;
     int patientFile;;
     char confirm;
+    char newLineCheck;
+    int flag = 1;
     printf("Enter the patient number: ");
     scanf("%d", &patientNum);
     printf("\n");
@@ -402,20 +406,27 @@ void removePatient(struct Patient patient[], int max)
         printf("\n\n");
         //Getting confirmation from user to remove patient record
         printf("Are you sure you want to remove this patient record? (y/n): ");
-        scanf(" %c", &confirm);
-
-        if (confirm == 'n' || confirm == 'N') 
+        do
         {
-            printf("Operation aborted.\n\n");
-            clearInputBuffer();
-        }
-
-        else if (confirm == 'y' || confirm == 'Y')
-        {
-            patient[patientFile].patientNumber = 0;
-            printf("Patient record has been removed!\n\n");
-            clearInputBuffer();
-        }
+            scanf(" %c%c", &confirm, &newLineCheck);
+            if ((confirm == 'n' || confirm == 'N') && (newLineCheck == '\n')) 
+            {
+                printf("Operation aborted.\n\n");
+                flag = 0;
+                clearInputBuffer();
+            }   
+            else if ((confirm == 'y' || confirm == 'Y')  && (newLineCheck == '\n'))
+            {
+                patient[patientFile].patientNumber = 0;
+                printf("Patient record has been removed!\n\n");
+                flag = 0;
+            }
+            else 
+            {
+                clearInputBuffer();
+                printf("ERROR: Character must be one of [yn]: ");
+            }
+        } while (flag);
     }
     else 
     {
@@ -447,15 +458,33 @@ int compareAppointments(const void *a, const void *b)
 void sort(struct Appointment app[], int max)
 {
     int i;
+    int j;
+    struct Appointment temp;
     //Storing the "UNIX" minutes 
     for (i = 0; i < max; i++) 
     {
         app[i].time.min = (app[i].date.year * 12 * 30 * 24 * 60) + (app[i].date.month * 30 * 24
         * 60) + (app[i].date.day * 24 * 60) + (app[i].time.hour * 60) + app[i].time.min;
     }
+    //Selection sort to organize the array
+    for (i = 0; i < max - 1; i++) 
+    {
+        int minIndex = i;
+        for (j = i + 1; j < max; j++) 
+        {
+            if (app[j].time.min < app[minIndex].time.min) 
+            {
+                minIndex = j;
+            }
+        }
 
-    qsort(app, max, sizeof(struct Appointment), compareAppointments);
-
+        if (minIndex != i) 
+        {
+            temp = app[i];
+            app[i] = app[minIndex];
+            app[minIndex] = temp;
+        }
+    }
     //Revert "UNIX" conversion to display properly
     for (i = 0; i < max; i++) 
     {
@@ -501,24 +530,22 @@ void viewAppointmentSchedule(struct ClinicData* data)
     //Get month from user
     printf("Month (1-12): ");
     date.month = inputIntRange(1, 12);
-
+    printf("Day (1-");
     //Number of days in each month
     int numOfDays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     //Number of days in a month 
     int totalDays = numOfDays[date.month];
-
     //Account for leap years since those exist for some reason I have yet to understand
     if (date.year % 4 == 0 && date.month == 2) 
     {
         totalDays = 29;
     }
-
     printf("%d)  : ", totalDays);
     date.day = inputIntRange(1, totalDays);
     printf("\n");
     //Sorts the data
     sort(data->appointments, data->maxAppointments);
-    
+
     //Prints appointment information followed by patient info
     displayScheduleTableHeader(&date, 0);
     for (i = 0; i < data->maxAppointments; i++) 
@@ -546,29 +573,24 @@ void addAppointment(struct Appointment *app, int maxApp, struct Patient *pt, int
 {
     struct Date date;
     struct Time time;
-    int numDays = 31;
     int patientNumber; 
-    int index; 
+    int patientIndex; 
     int slotAvail = 1;
 
     //Getting user input 
     printf("Patient Number: ");
     patientNumber = inputIntPositive();
-    index = findPatientIndexByPatientNum(patientNumber, pt, maxPatients);
-    if(index >= 0)
+    patientIndex = findPatientIndexByPatientNum(patientNumber, pt, maxPatients);
+    if(patientIndex >= 0)
     {
         do
         {
             printf("Year        : ");
             date.year = inputIntPositive();
-            // Taking the month as input
             printf("Month (1-12): ");
             date.month = inputIntRange(1, 12);
-            // Taking the day as input
             printf("Day (1-");
-            //Number of days in each month
-            int numOfDays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-            //Number of days in a month 
+            int numOfDays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
             int totalDays = numOfDays[date.month];
             //Account for leap years since those exist for some reason I have yet to understand
             if (date.year % 4 == 0 && date.month == 2) 
@@ -594,6 +616,7 @@ void addAppointment(struct Appointment *app, int maxApp, struct Patient *pt, int
                 while ((time.hour < SOD || time.hour > EOD) || (time.hour && time.min > 0) 
                 || (time.min % MINUTE_INTERVAL != 0))
                 {
+                    //Print error and correct user if input is out of scope
                     printf("ERROR: Time must be between %02d:00 and %02d:00 in %02d minute intervals.\n\n",
                     SOD, EOD, MINUTE_INTERVAL);
                     printf("Hour (0-23)  : ");
@@ -603,24 +626,80 @@ void addAppointment(struct Appointment *app, int maxApp, struct Patient *pt, int
                 }
                 slotAvail = 0;
             }
+
         } while (slotAvail);
-        
-         
+
+        //Writing the new values into the open slot
+        patientIndex = openSlot(app, maxApp);
+        app[patientIndex].date = date;
+        app[patientIndex].time = time;
+        app[patientIndex].patientNumber = patientNumber;
+        printf("\n*** Appointment scheduled! ***\n\n");
     }
-
-
+    else
+    {
+        printf("\nERROR: Patient record not found!\n\n");
+    }
 }
 
 // Remove an appointment record from the appointment array
 // Todo:
-void removeAppointment(struct Appointment *app, int, struct Patient *pt, int)
+void removeAppointment(struct Appointment *app, int maxAppointment, struct Patient *pt, int maxPatient)
 {
+    struct Date date;
+    int patientIndex;
+    int patientNumber;
+    int appointIndex;
+    //Get patient number from user
+    printf("Patient Number: ");
+    patientNumber = inputIntPositive();
+    patientIndex = findPatientIndexByPatientNum(patientNumber, pt, maxPatient);
+    if(patientIndex >= 0)
+    {
+        printf("Year        : ");
+            date.year = inputIntPositive();
+            printf("Month (1-12): ");
+            date.month = inputIntRange(1, 12);
+            printf("Day (1-");
+            int numDays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
+            int totalDays = numDays[date.month];
+            //Account for leap years since those exist for some reason I have yet to understand
+            if (date.year % 4 == 0 && date.month == 2) 
+            {
+                totalDays = 29;
+            }
+            printf("%d)  : ", totalDays);
+            date.day = inputIntRange(1, totalDays);
+            appointIndex = freeAppointment(patientNumber, date, app, maxAppointment);
+            if (appointIndex >=0)
+            {
+                printf("\n");
+                displayPatientData(&pt[patientIndex],FMT_FORM);
+                printf("Are you sure you want to remove this appointment (y,n): ");
 
+                if (inputCharOption("yn") == 'y' || 'Y')
+                {
+                    app[appointIndex].patientNumber = 0;
+                    printf("\nAppointment record has been removed!\n\n");
+                }
+                else
+                {
+                    printf("ERROR: No appointment for this date!\n\n");
+                }
+            }
+            
+    }
+
+    else
+    {
+        printf("ERROR: Patient record not found!\n\n");
+    }
 }
 
 //////////////////////////////////////
 // UTILITY FUNCTIONS
 //////////////////////////////////////
+//Find an available time slot
 int timeSlotCheck(struct Date date, struct Time time, struct Appointment* app, int maxAppointments)
 {
     int i;
@@ -635,8 +714,36 @@ int timeSlotCheck(struct Date date, struct Time time, struct Appointment* app, i
     }
     return avail;
 }
+//Checks to find the next available slot 
+int openSlot(struct Appointment* app, int maxAppointments)
+{
+    int i;
+    for (i = 0; i < maxAppointments; i++)
+    {
+        if (app[i].patientNumber < 1) 
+        {
+            return i;
+        }
+        i++;
+    }
+    return maxAppointments;
+}
 
-
+//Checks to see if an appointment is valid
+int freeAppointment(int patientNumber, struct Date date, struct Appointment *app, int maxAppointments)
+{
+    int i;
+    int free = 0;
+    while (free == 0 && i < maxAppointments)
+    {
+        if ((app[i].patientNumber == patientNumber) && (app[i].date.day == date.day) && (app[i].date.month == date.month) && (app[i].date.year == date.year))
+        {
+            free = 1;
+        }
+        i++;
+    }
+    return i - 1;
+}
 // Search and display patient record by patient number (form)
 // (Copy your code from MS#2)
 void searchPatientByPatientNumber(const struct Patient patient[], int max)
@@ -728,7 +835,6 @@ int findPatientIndexByPatientNum(int patientNumber, const struct Patient patient
     return -1;
 }
 
-
 //////////////////////////////////////
 // USER INPUT FUNCTIONS
 //////////////////////////////////////
@@ -742,13 +848,12 @@ void inputPatient(struct Patient* patient)
     printf("Number: %05d\n", patient->patientNumber);
     printf("Name  : ");
     //gets name from user and inputs into array
-    fgets(patient->name, sizeof(patient->name), stdin);
-    if (patient->name[strlen(patient->name) - 1] == '\n');
+    inputCString(patient->name, 1, NAME_LEN);
+   if (patient->name[strlen(patient->name) - 1] == '\n');
     {
         //Replaces newline character with null terminator
         patient->name[strlen(patient->name) - 1] = '\0';
     }
-
     printf("\n");
     inputPhoneData(&patient->phone);
 }
@@ -758,6 +863,7 @@ void inputPatient(struct Patient* patient)
 void inputPhoneData(struct Phone* phone)
 {
     int phoneType;
+    char number[PHONE_LEN + 1];
     printf("Phone Information\n");
     printf("-----------------\n");
     printf("How will the patient like to be contacted?\n");
@@ -766,19 +872,17 @@ void inputPhoneData(struct Phone* phone)
     printf("3. Work\n");
     printf("4. TBD\n");
     printf("Selection: ");
-    scanf("%d", &phoneType);
+    phoneType = inputIntRange(1, 4);
     printf("\n");
-
     switch (phoneType)
     {
     case 1:
         //Storing the description
         strncpy(phone->description, "CELL", PHONE_DESC_LEN);
         printf("Contact: %s\n", phone->description);
-        //Clearing buffer then getting user input for the phone number
-        clearInputBuffer();
         printf("Number : ");
-        fgets(phone->number, sizeof(phone->number), stdin);
+        inputCString(number, 10, 10);
+        strcpy(phone->number, number);
         printf("\n");
         break;
     case 2:

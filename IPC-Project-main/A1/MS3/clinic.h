@@ -18,7 +18,6 @@ piece of work is entirely of my own creation.
 #ifndef CLINIC_H
 #define CLINIC_H
 
-
 //////////////////////////////////////
 // Module macro's (usable by any file that includes this header)
 //////////////////////////////////////
@@ -33,11 +32,8 @@ piece of work is entirely of my own creation.
 #define PHONE_DESC_LEN 4
 #define PHONE_LEN 10
 
-
 // MS#3 Additional macro's:
 // ToDo:
-
-//
 //SOD = Start of Day
 //EOD = End of Day
 #define SOD 10
@@ -82,7 +78,6 @@ struct Date
     int year;
 };
 
-
 // Data type: Appointment
 // ToDo:
 struct Appointment
@@ -91,7 +86,6 @@ struct Appointment
     struct Date date;
     struct Time time;
 };
-
 
 // ClinicData type: Provided to student
 // !!! DO NOT MODIFY THIS DATA TYPE !!!
@@ -119,8 +113,6 @@ void displayScheduleTableHeader(const struct Date* date, int isAllRecords);
 // Display a single appointment record with patient info. in tabular format
 void displayScheduleData(const struct Patient* patient,const struct Appointment* appoint,
                         int includeDateField);
-
-
 //////////////////////////////////////
 // MENU & ITEM SELECTION FUNCTIONS
 //////////////////////////////////////
@@ -172,7 +164,6 @@ void removeAppointment(struct Appointment *app, int, struct Patient *pt, int);
 //////////////////////////////////////
 // UTILITY FUNCTIONS
 //////////////////////////////////////
-
 // Search and display patient record by patient number (form)
 void searchPatientByPatientNumber(const struct Patient patient[], int max);
 
@@ -183,10 +174,16 @@ void searchPatientByPhoneNumber(const struct Patient patient[], int max);
 int nextPatientNumber(const struct Patient patient[], int max);
 
 // Find the patient array index by patient number (returns -1 if not found)
-int findPatientIndexByPatientNum(int patientNumber,
-                                 const struct Patient patient[], int max);
+int findPatientIndexByPatientNum(int patientNumber, const struct Patient patient[], int max);
 
+// Check if there is an available time slot 
+int timeSlotCheck(struct Date date, struct Time time, struct Appointment* app, int maxAppointments);
 
+//Checks to find open appointment
+int openSlot(struct Appointment* app, int maxAppointments);
+
+//Checks to see if an appointment is valid
+int freeAppointment(int patientNumber, struct Date date, struct Appointment *app, int maxAppointments);
 //////////////////////////////////////
 // USER INPUT FUNCTIONS
 //////////////////////////////////////
@@ -196,9 +193,6 @@ void inputPatient(struct Patient* patient);
 
 // Get user input for phone contact information
 void inputPhoneData(struct Phone* phone);
-
-
-
 
 //////////////////////////////////////
 // FILE FUNCTIONS

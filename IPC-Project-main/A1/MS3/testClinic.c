@@ -351,7 +351,7 @@ void editPatient(struct Patient patient[], int max) {
 // (Copy your code from MS#2)
 void removePatient(struct Patient patient[], int max) {
     int pNumber, index;
-        char choice, ch;
+    char choice, ch;
     printf("Enter the patient number: ");
     scanf("%d", &pNumber);
     printf("\n");
@@ -375,14 +375,14 @@ void removePatient(struct Patient patient[], int max) {
             }
             else if ((choice == 'y' || choice == 'Y') && (ch == '\n')) {
                 // Assigning patient to safe empty state so that the other function can't access it
-                                patient[index].patientNumber = 0;
+                patient[index].patientNumber = 0;
                 printf("Patient record has been removed!\n\n");
                 flag = 0;
             }
             else {
                 clearInputBuffer();
                 printf("ERROR: Character must be one of [yn]: ");
-            }    
+            }  
         } while (flag);
     }
     else {
@@ -555,7 +555,8 @@ maxPatients) {
     printf("Patient Number: ");
     patientNumber = inputIntPositive();
     index = findPatientIndexByPatientNum(patientNumber, pt, maxPatients);
-    if (index >= 0) {
+    if (index >= 0) 
+    {
         // Taking the year as input
         printf("Year        : ");
         date.year = inputIntPositive();
@@ -700,11 +701,12 @@ int nextSlotAvailable(struct Appointment* app, int maxAppointments)
 }
 // Checks to see if an appointment is valid
 int validAppointment(int patientNumber, struct Date date, struct Appointment *app, int 
-maxAppointments) {    int i = 0, valid = 0;
+maxAppointments) 
+{    
+    int i = 0, valid = 0;
     while (valid == 0 && i < maxAppointments)
     {
-        if ((app[i].patientNumber == patientNumber) && (app[i].date.day == date.day) && 
-(app[i].date.month == date.month) && (app[i].date.year == date.year)) {
+        if ((app[i].patientNumber == patientNumber) && (app[i].date.day == date.day) && (app[i].date.month == date.month) && (app[i].date.year == date.year)) {
             valid = 1;
         }
         i++;
@@ -823,8 +825,8 @@ int importAppointments(const char* datafile, struct Appointment appoints[], int 
         // Iterating until file reaches the end of file or the max is reached
         for (i = 0; i < max && !feof(fp); i++) {
             // Reading values from file and storing them
-                        fscanf(fp, "%d,%d,%d,%d,%d,%d", &appoints[i].patientNumber, &appoints[i].date.year, 
-&appoints[i].date.month, &appoints[i].date.day, &appoints[i].time.hour, &appoints[i].time.min);
+            fscanf(fp, "%d,%d,%d,%d,%d,%d", &appoints[i].patientNumber, &appoints[i].date.year, 
+            &appoints[i].date.month, &appoints[i].date.day, &appoints[i].time.hour, &appoints[i].time.min);
             
             // Incrementing count if the end of file is not reached
             if (!feof(fp)) {
