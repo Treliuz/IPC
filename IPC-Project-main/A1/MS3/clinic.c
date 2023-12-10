@@ -731,7 +731,7 @@ int openSlot(struct Appointment* app, int maxAppointments)
 //Checks to see if an appointment is valid
 int freeAppointment(int patientNumber, struct Date date, struct Appointment *app, int maxAppointments)
 {
-    int i;
+    int i = 0;
     int free = 0;
     while (free == 0 && i < maxAppointments)
     {
@@ -914,7 +914,7 @@ void inputPhoneData(struct Phone* phone)
 /// ToDo:
 int importPatients(const char* datafile, struct Patient patients[], int max)
 {
-    int i;
+    int i = 0;
 
     FILE *fp;
 
@@ -943,7 +943,7 @@ int importPatients(const char* datafile, struct Patient patients[], int max)
 int importAppointments(const char* datafile, struct Appointment appoints[], int max)
 {
     int i;
-    int count;
+    int count = 0;
 
     FILE *fp;
     fp = fopen(datafile, "r");

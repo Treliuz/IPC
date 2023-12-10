@@ -44,7 +44,7 @@ void suspend(void)
 int inputInt(void)
 {
 	int userInput;
-	char newLine;
+	char newLine = 'a';
 
 	while (newLine != '\n')
 	{
@@ -61,7 +61,7 @@ int inputInt(void)
 int inputIntPositive(void)
 {
 	int userInput;
-	char newLine;
+	char newLine = 'a';
 	while (newLine != '\n' || userInput <= 0)
 	{
 		scanf("%d%c", &userInput, &newLine);
@@ -82,7 +82,7 @@ int inputIntPositive(void)
 int inputIntRange(int min, int max)
 {
 	int userInput;
-	char newLine;
+	char newLine = 'a';
 	while (newLine != '\n' || userInput < min || userInput > max)
 	{
 		scanf("%d%c", &userInput, &newLine);
@@ -130,7 +130,7 @@ char inputCharOption(const char* validChar)
 void inputCString(char* str, int minLength, int maxLength)
 {
 	int length = 0;
-	char ch;
+	char ch = 'a';
 	do
     {
 		length = 0;
