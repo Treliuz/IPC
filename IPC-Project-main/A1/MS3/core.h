@@ -1,9 +1,9 @@
 /*/////////////////////////////////////////////////////////////////////////
                         Assignment 1 - Milestone 3
-Full Name  :
-Student ID#:
-Email      :
-Section    :
+Full Name  : Joseph Mwamba-Mukuna
+Student ID#: 163887216
+Email      : jmwamba-mukuna@myseneca.ca
+Section    : NRA
 
 Authenticity Declaration:
 I declare this submission is the result of my own work and has not been
@@ -62,7 +62,8 @@ char inputCharOption(const char valid[]);
 
 //Receives a string and checks if its length is valid
 void inputCString(char* str, int minChar, int maxChar);
-
+//Receive a numeric string
+void inputNumberString(char* str, int maxLength);
 //Receives 10 digits and formats it into a phone number
 void displayFormattedPhone(const char str[]);
 // !!! DO NOT DELETE THE BELOW LINE !!!

@@ -176,49 +176,26 @@ void inputCString(char* str, int minLength, int maxLength)
     } while (length < minLength || length > maxLength);
 }
 
-/* void inputCString(char* str, int minChar, int maxChar) {
-    int flag = 1;
-    char ch = 'a';
-    while (flag) {
-        int len = 0;
-        // Takes a string as input until it sees a newline character
-        while (ch != '\n' && len <= maxChar) {
-            ch = getchar();
-            str[len] = ch;
-            len++;
-        };
-        // If the string is less than or equal to the maxChars we will just add '\0' to the end to mark 
-        //the end of the string
-        if (ch == '\n' && len <= (maxChar + 1)) {
-            len--;
-            str[len] = '\0';
+void inputNumberString(char* str, int maxLength)
+{
+	int validInput = 0;
+	int length;
+    while (!validInput)
+	{
+        scanf("%s", str);
+
+        // Clear input buffer
+    	clearInputBuffer();
+		length = strlen(str);
+        if (length != maxLength) 
+		{
+            printf("Invalid 10-digit number! Number: ");
+        } else 
+		{
+            validInput = 1;
         }
-        // If length is more than maxChar, we will add '\0' to the end and ignore the extra characters.
-        //We will also remove the extra characters from the buffer.
-        else {
-            str[maxChar] = '\0';
-            clearInputBuffer();
-        }
-        if (minChar == maxChar && len != minChar) {
-            printf("ERROR: String length must be exactly %d chars: ", minChar);
-            ch = 'a';
-        }
-        else if (len < minChar || len > maxChar) {
-            if (len > maxChar) {
-                printf("ERROR: String length must be no more than %d chars: ", maxChar);
-                ch = 'a';
-            }
-            else if (len < minChar) {
-                printf("ERROR: String length must be between %d and %d chars: ", minChar, maxChar);
-                ch = 'a';
-            }
-        }
-        else 
-        {
-        flag = 0;
-        }
-    }
-}*/
+    } 
+}
 
 void displayFormattedPhone(const char* str)
 {

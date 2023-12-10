@@ -1,9 +1,9 @@
 /*/////////////////////////////////////////////////////////////////////////
                         Assignment 1 - Milestone 3
-Full Name  :
-Student ID#:
-Email      :
-Section    :
+Full Name  : Joseph Mwamba-Mukuna
+Student ID#: 163887216
+Email      : jmwamba-mukuna@myseneca.ca
+Section    : NRA
 
 Authenticity Declaration:
 I declare this submission is the result of my own work and has not been

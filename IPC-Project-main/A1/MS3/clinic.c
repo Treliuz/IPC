@@ -1,9 +1,9 @@
 /*/////////////////////////////////////////////////////////////////////////
                         Assignment 1 - Milestone 3
-Full Name  :
-Student ID#:
-Email      :
-Section    :
+Full Name  : Joseph Mwamba-Mukuna
+Student ID#: 163887216
+Email      : jmwamba-mukuna@myseneca.ca
+Section    : NRA
 
 Authenticity Declaration:
 I declare this submission is the result of my own work and has not been
@@ -332,8 +332,8 @@ void searchPatientData(const struct Patient patient[], int max)
 // (Copy your code from MS#2)
 void addPatient(struct Patient patient[], int max)
 {
-    int i;
-    int size = 0;
+    int i = 0;
+    int patientFile = -1;
     int spotFound = 0;
     for (i = 0; i < max; i++)
     {
@@ -342,8 +342,8 @@ void addPatient(struct Patient patient[], int max)
         if (patient[i].patientNumber == 0)
         {
             spotFound = 1;
+            patientFile = i;
         }
-        size++;
     }
     //Prints an error if array is full
     if (spotFound == 0)
@@ -353,10 +353,9 @@ void addPatient(struct Patient patient[], int max)
     //Checking to see if the max number of patients has been reached
     else 
     {
-        patient[size].patientNumber = nextPatientNumber(patient, max);
-        inputPatient(patient + size);
+        patient[patientFile].patientNumber = nextPatientNumber(patient, max);
+        inputPatient(&patient[patientFile]);
         printf("*** New patient record added ***\n\n");
-        clearInputBuffer();
     }
 }
 
@@ -849,7 +848,8 @@ void inputPatient(struct Patient* patient)
     printf("Name  : ");
     //gets name from user and inputs into array
     inputCString(patient->name, 1, NAME_LEN);
-   if (patient->name[strlen(patient->name) - 1] == '\n');
+    //Removes newline
+    if (patient->name[strlen(patient->name) - 1] == '\n')
     {
         //Replaces newline character with null terminator
         patient->name[strlen(patient->name) - 1] = '\0';
@@ -881,34 +881,29 @@ void inputPhoneData(struct Phone* phone)
         strncpy(phone->description, "CELL", PHONE_DESC_LEN);
         printf("Contact: %s\n", phone->description);
         printf("Number : ");
-        inputCString(number, 10, 10);
+        inputNumberString(number, PHONE_LEN);
         strcpy(phone->number, number);
-        printf("\n");
         break;
     case 2:
         strncpy(phone->description, "HOME", PHONE_DESC_LEN);
         printf("Contact: %s\n", phone->description);
-        clearInputBuffer();
         printf("Number : ");
-        fgets(phone->number, sizeof(phone->number), stdin);
-        printf("\n");
+        inputNumberString(number, PHONE_LEN);
+        strcpy(phone->number, number);
         break;
     case 3:
         strncpy(phone->description, "WORK", PHONE_DESC_LEN);
         printf("Contact: %s\n", phone->description);
-        clearInputBuffer();
         printf("Number : ");
-        fgets(phone->number, sizeof(phone->number), stdin);
-        printf("\n");
+        inputNumberString(number, PHONE_LEN);
+        strcpy(phone->number, number);
         break;
     case 4:
         strncpy(phone->description, "TBD", PHONE_DESC_LEN);
-        *phone->number = 0;
-        break;
-    default:
-        printf("Error:\n");
+        *phone->number = '\0';
         break;
     }
+    printf("\n");
 }
 
 //////////////////////////////////////

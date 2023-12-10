@@ -325,7 +325,7 @@ void addPatient(struct Patient patient[], int max) {
         printf("ERROR: Patient listing is FULL!\n\n");
     }
     else
-    {        // Assigning the value
+    {   // Assigning the value
         number = nextPatientNumber(patient, max);
         patient[index].patientNumber = number;
         inputPatient(&patient[index]);
