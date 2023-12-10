@@ -779,7 +779,7 @@ void searchPatientByPhoneNumber(const struct Patient patient[], int max)
     int found = 0;
     char phoneNum[PHONE_LEN + 1];
     clearInputBuffer();
-    printf("Seach by phone number: ");
+    printf("Search by phone number: ");
     fgets(phoneNum, sizeof(phoneNum), stdin);
     printf("\n");
     //Tabular format header
