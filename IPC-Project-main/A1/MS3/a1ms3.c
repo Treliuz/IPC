@@ -33,3 +33,21 @@ int main(void)
     
     return 0;
 }
+
+void findCheapest(const struct Part* database, const int arrSZ)
+{
+    int cheapestIndex = 0;
+    int i;
+    double cheapest = database[cheapestIndex].price;
+    //find the cheapest in stock product
+    for (i = 1; ___________; _______________)
+    {
+        if (database[i].price < ________________ && _______________)
+        {
+            cheapestIndex = i;
+            cheapest = ______________;
+        }
+    }
+    printf("The cheapest in stock product is: %s with price %.2f\n",
+     database[minIndex].name, database[minIndex].price);
+}
